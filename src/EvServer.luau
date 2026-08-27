@@ -16,7 +16,7 @@ if not RemoteFolder then
 	RemoteFolder.Parent = ReplicatedStorage
 end
 
-function EvServer.CreateEvent(Name: string, ArgumentType: SharedTypes.ArgumentTypeList)
+function EvServer.CreateEvent(Name: string, ArgumentType: SharedTypes.ArgumentType)
 	if Events[Name] then
 		warn(`[{Name}] already exists. Continuing.`)
 		return Events[Name]
