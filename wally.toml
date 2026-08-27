@@ -2,7 +2,7 @@
 name = "editx1980/ev"
 description = "A simple Roblox networking package with runtime argument validation."
 license = "MIT"
-version = "0.0.4"
+version = "0.0.5"
 registry = "https://github.com/UpliftGames/wally-index"
 realm = "shared"
 
