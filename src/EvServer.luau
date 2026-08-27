@@ -8,13 +8,9 @@ export type EvServer = typeof(EvServer)
 
 local Events: { [string]: EventServer.EventServer } = {}
 
-local RemoteFolder = ReplicatedStorage:FindFirstChild("Remotes")
-
-if not RemoteFolder then
-	RemoteFolder = Instance.new("Folder")
-	RemoteFolder.Name = "Remotes"
-	RemoteFolder.Parent = ReplicatedStorage
-end
+local RemoteFolder = Instance.new("Folder")
+RemoteFolder.Name = "Remotes"
+RemoteFolder.Parent = ReplicatedStorage
 
 function EvServer.CreateEvent(Name: string, ArgumentType: SharedTypes.ArgumentType)
 	if Events[Name] then
