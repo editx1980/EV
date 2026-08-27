@@ -11,9 +11,7 @@ local Events: { [string]: EventServer.EventServer } = {}
 local RemoteFolder = ReplicatedStorage:FindFirstChild("Remotes")
 
 if not RemoteFolder then
-	RemoteFolder = Instance.new("Folder")
-	RemoteFolder.Name = "Remotes"
-	RemoteFolder.Parent = ReplicatedStorage
+	warn("Please create a RemoteFolder named: Remotes, with the parent being ReplicatedStorage.")
 end
 
 function EvServer.CreateEvent(Name: string, ArgumentType: SharedTypes.ArgumentType)
