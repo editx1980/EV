@@ -1,53 +1,68 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
 local EventServer = require(script.Parent.EventServer)
 local SharedTypes = require(script.Parent.SharedTypes)
 
 local EvServer = {}
-export type EvServer = typeof(EvServer)
+
+export type EvServer = {
+	CreateEvent: (Name: string, ArgumentType: SharedTypes.ArgumentType) -> EventServer.EventServer,
+	GetEvent: (Name: string) -> EventServer.EventServer?,
+	DestroyEvent: (Name: string) -> (),
+}
 
 local Events: { [string]: EventServer.EventServer } = {}
 
-local RemoteFolder = ReplicatedStorage:FindFirstChild("Remotes")
+local RemoteFolder: Folder?
 
-if not RemoteFolder then
-	warn("Please create a RemoteFolder named: Remotes, with the parent being ReplicatedStorage.")
+local function GetRemoteFolder(): Folder
+	if RemoteFolder then
+		return RemoteFolder
+	end
+
+	local ExistingFolder = script.Parent:FindFirstChild("Remotes")
+
+	if ExistingFolder then
+		RemoteFolder = ExistingFolder :: Folder
+	else
+		RemoteFolder = Instance.new("Folder")
+		RemoteFolder.Name = "Remotes"
+		RemoteFolder.Parent = script.Parent
+	end
+
+	return RemoteFolder
 end
 
 function EvServer.CreateEvent(Name: string, ArgumentType: SharedTypes.ArgumentType)
-	if Events[Name] then
-		warn(`[{Name}] already exists. Continuing.`)
-		return Events[Name]
+	local ExistingEvent = Events[Name]
+
+	if ExistingEvent then
+		return ExistingEvent
 	end
 
-	local Event = Instance.new("RemoteEvent")
-	Event.Name = Name
-	Event.Parent = RemoteFolder
+	local RemoteEvent = Instance.new("RemoteEvent")
+	RemoteEvent.Name = Name
+	RemoteEvent.Parent = GetRemoteFolder()
 
-	local NewRemote = EventServer.new(Event, ArgumentType)
-	Events[Name] = NewRemote
+	local Event = EventServer.new(RemoteEvent, ArgumentType)
 
-	return NewRemote
+	Events[Name] = Event
+
+	return Event
 end
 
 function EvServer.GetEvent(Name: string)
-	if not Events[Name] then
-		warn(`[{Name}] does not exist!`)
-		return nil
-	end
-
 	return Events[Name]
 end
 
 function EvServer.DestroyEvent(Name: string)
-	if not Events[Name] then
+	local Event = Events[Name]
+
+	if not Event then
 		warn(`[{Name}] does not exist!`)
-		return nil
+		return
 	end
 
-	Events[Name]:Destroy()
+	Event:Destroy()
 	Events[Name] = nil
-	return
 end
 
 return EvServer

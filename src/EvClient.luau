@@ -1,14 +1,13 @@
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-
 local EventClient = require(script.Parent.EventClient)
 local SharedTypes = require(script.Parent.SharedTypes)
 
 local EvClient = {}
-export type EvClient = typeof(EvClient)
+
+export type EvClient = {
+	GetEvent: (Name: string, ArgumentType: SharedTypes.ArgumentType) -> EventClient.EventClient?,
+}
 
 local Events: { [string]: EventClient.EventClient } = {}
-
-local RemoteFolder = ReplicatedStorage:WaitForChild("Remotes")
 
 function EvClient.GetEvent(Name: string, ArgumentType: SharedTypes.ArgumentType)
 	local ExistingEvent = Events[Name]
@@ -17,18 +16,18 @@ function EvClient.GetEvent(Name: string, ArgumentType: SharedTypes.ArgumentType)
 		return ExistingEvent
 	end
 
+	local RemoteFolder = script.Parent:WaitForChild("Remotes")
 	local RemoteEvent = RemoteFolder:FindFirstChild(Name)
-
 	if not RemoteEvent then
 		warn(`[{Name}] does not exist!`)
 		return nil
 	end
 
-	local NewEvent = EventClient.new(RemoteEvent, ArgumentType)
+	local Event = EventClient.new(RemoteEvent, ArgumentType)
 
-	Events[Name] = NewEvent
+	Events[Name] = Event
 
-	return NewEvent
+	return Event
 end
 
 return EvClient
