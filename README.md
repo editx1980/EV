@@ -31,4 +31,4 @@ Install EV through Wally:
 
 [dependencies]
 
-ev = "editx1980/ev@0.1.0"
+ev = "editx1980/ev@0.1.1"
