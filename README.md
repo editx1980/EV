@@ -17,7 +17,7 @@ Simple API
 
 EV uses Roblox RemoteEvents underneath.
 
-When you create an event on the server, EV creates and manages the corresponding RemoteEvent inside the Remotes folder ( Create yourself parent is ReplicatedStorage ).
+When you create an event on the server, EV creates and manages the corresponding RemoteEvent inside the Remotes folder.
 
 The server and client interact with the event through EV's API instead of directly accessing the RemoteEvent.
 
