@@ -56,6 +56,11 @@ function EventServer.Listen(self: EventServer, callback: (...any) -> ())
 	local event: RemoteEvent = self.event
 
 	local connection = event.OnServerEvent:Connect(function(Player: Player, Argument: any)
+		if self.argumentType == "none" then
+			callback(Player)
+			return
+		end
+
 		if not Validator.Check(Argument, self.argumentType) then
 			warn(`[{event.Name}] Expected {self.argumentType}, got {typeof(Argument)}`)
 			return

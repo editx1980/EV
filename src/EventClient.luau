@@ -37,6 +37,11 @@ end
 function EventClient.Listen(self: EventClient, callback: (...any) -> ())
 	local event: RemoteEvent = self.event
 
+	if self.argumentType == "none" then
+		callback()
+		return
+	end
+
 	local connection = event.OnClientEvent:Connect(function(Argument: any)
 		if not Validator.Check(Argument, self.argumentType) then
 			warn(`[{event.Name}] Expected {self.argumentType}, got {typeof(Argument)}`)
